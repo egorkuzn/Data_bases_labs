@@ -1,4 +1,4 @@
-SELECT "Tasks".task_name,
+SELECT DISTINCT "Tasks".task_name,
        "Tasks".message,
        "Projects".project_name,
        "Appointments".workload_percentage
