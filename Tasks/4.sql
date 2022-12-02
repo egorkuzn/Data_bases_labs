@@ -3,7 +3,7 @@ SELECT ProjectStaticView.project_name,
        ProjectStaticView.surname,
        ProjectStaticView.name,
        ProjectStaticView.fathername,
-       ProjectProgrammersCount.prog_count
+       CASE WHEN ProjectProgrammersCount.prog_count IS NULL THEN '0' ELSE ProjectProgrammersCount.prog_count END
 FROM (SELECT P.project_id,
             COUNT(DISTINCT A.programmer_id) as prog_count
       FROM "Appointments" as A
