@@ -3,9 +3,9 @@ SELECT ProjectStaticView.project_name,
        ProjectStaticView.surname,
        ProjectStaticView.name,
        ProjectStaticView.fathername,
-       CASE WHEN ProjectProgrammersCount.prog_count IS NULL THEN '0' ELSE ProjectProgrammersCount.prog_count END
+       CASE WHEN ProjectProgrammersCount.active_programmers_count IS NULL THEN '0' ELSE ProjectProgrammersCount.active_programmers_count END
 FROM (SELECT P.project_id,
-            COUNT(DISTINCT A.programmer_id) as prog_count
+            COUNT(DISTINCT A.programmer_id) as active_programmers_count
       FROM "Appointments" as A
                INNER JOIN "Tasks" on "Tasks".task_id = A.task_id
                LEFT JOIN "Projects" as P on "Tasks".project_id = P.project_id
@@ -17,7 +17,9 @@ FROM (SELECT P.project_id,
                 M.name,
                 M.fathername
         FROM "Projects" as P LEFT JOIN "Managers" M on M.human_id = P.manager_id
-     ) as ProjectStaticView on ProjectStaticView.project_id = ProjectProgrammersCount.project_id;
+     ) as ProjectStaticView on ProjectStaticView.project_id = ProjectProgrammersCount.project_id
+GROUP BY ProjectStaticView.project_name, ProjectStaticView.planned_time, ProjectStaticView.surname, ProjectStaticView.name, ProjectStaticView.fathername, CASE WHEN ProjectProgrammersCount.active_programmers_count IS NULL THEN '0' ELSE ProjectProgrammersCount.active_programmers_count END
+ORDER BY ProjectStaticView.project_name;
 
 -- вывести менеджера на проектах у которого самый высокий процент выполнения задач
 SELECT DISTINCT P.project_name,
