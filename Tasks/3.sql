@@ -10,7 +10,7 @@ FROM (  SELECT P.project_id
                 WHERE (task_percentage_status != 100
                     OR when_finishes >= '2003-01-01'::DATE)
                 GROUP BY project_id) as "Out year"
-        FULL JOIN "Projects" as P on "Out year".project_id = P.project_id
+        LEFT JOIN "Projects" as P on "Out year".project_id = P.project_id
         WHERE "Out year".count IS NULL) as "In time"
 JOIN "Tasks" T on "In time".project_id = T.project_id
 INNER JOIN "Projects" P on T.project_id = P.project_id
